@@ -324,7 +324,7 @@ class SoftweightsHeuristicModel(model.Model):
         
         """
         # Hinge loss objective.
-        self.objective = tf.losses.hinge_loss(self.labels_placeholder, self.predictions_tensor)
+        self.objective = tf.keras.losses.hinge_loss(self.labels_placeholder, self.predictions_tensor)
        
         # Create A matrix for projection.
         self.build_A_groups()
