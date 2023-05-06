@@ -394,9 +394,9 @@ def training_generator(sw_model,
     random.seed(88)
     random.shuffle(permutation)
 
-    session = tf.Session()
-    session.run((tf.global_variables_initializer(),
-               tf.local_variables_initializer()))
+    session = tf.compat.v1.Session()
+    session.run((tf.compat.v1.global_variables_initializer(),
+               tf.compat.v1.local_variables_initializer()))
 
     # Iterate through minibatches. Gradients are computed on each minibatch.
     minibatch_start_index = 0
