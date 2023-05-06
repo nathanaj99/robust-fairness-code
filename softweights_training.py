@@ -51,9 +51,9 @@ class SoftweightsHeuristicModel(model.Model):
             # r[4k-3]: group = k, prediction = 0, label = 0
             r_list.append(0) 
             # r[4k-2]: group = k, prediction = 0, label = 1
-            r_list.append(tf.losses.hinge_loss(self.labels_placeholder, self.predictions_tensor, weights=tf.multiply(protected_placeholder,self.labels_placeholder), reduction=tf.compat.v1.losses.Reduction.SUM))
+            r_list.append(tf.compat.v1.losses.hinge_loss(self.labels_placeholder, self.predictions_tensor, weights=tf.multiply(protected_placeholder,self.labels_placeholder), reduction=tf.compat.v1.losses.Reduction.SUM))
             # r[4k-1]: group = k, prediction = 1, label = 0
-            r_list.append(tf.losses.hinge_loss(self.labels_placeholder, self.predictions_tensor, weights=tf.multiply(protected_placeholder,utils.flip_binary_tensor(self.labels_placeholder)), reduction=tf.compat.v1.losses.Reduction.SUM))
+            r_list.append(tf.compat.v1.losses.hinge_loss(self.labels_placeholder, self.predictions_tensor, weights=tf.multiply(protected_placeholder,utils.flip_binary_tensor(self.labels_placeholder)), reduction=tf.compat.v1.losses.Reduction.SUM))
             # r[4k]: group = k, prediction = 1, label = 1
             r_list.append(0) 
         assert(len(r_list) == (self.W_num_rows))
@@ -111,7 +111,7 @@ class SoftweightsHeuristicModel(model.Model):
             # r[4k-2]: group = k, prediction = 0, label = 1
             r_list_1.append(0)
             # r[4k-1]: group = k, prediction = 1, label = 0
-            r_list_1.append(tf.losses.hinge_loss(
+            r_list_1.append(tf.compat.v1.losses.hinge_loss(
                 self.labels_placeholder, 
                 self.predictions_tensor, 
                 weights=tf.multiply(protected_placeholder,utils.flip_binary_tensor(self.labels_placeholder)), 
@@ -279,7 +279,7 @@ class SoftweightsHeuristicModel(model.Model):
     
     def get_equal_tpr_constraints(self, constraints_slack=1.0):
         constraints_list = []
-        average_tpr = tf.losses.hinge_loss(utils.flip_binary_tensor(self.labels_placeholder), self.predictions_tensor, weights=self.labels_placeholder, reduction=tf.compat.v1.losses.Reduction.MEAN)
+        average_tpr = tf.compat.v1.losses.hinge_loss(utils.flip_binary_tensor(self.labels_placeholder), self.predictions_tensor, weights=self.labels_placeholder, reduction=tf.compat.v1.losses.Reduction.MEAN)
         for j in range(self.num_groups):
             # Compute r^T W e_j
             W_j = tf.gather(self.W_variable, j, axis=1)
