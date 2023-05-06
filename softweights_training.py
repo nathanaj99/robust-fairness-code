@@ -384,7 +384,7 @@ def training_generator(sw_model,
                        num_iterations_per_loop=1,
                        num_loops=1,
                        num_iterations_W=1):
-    tf.set_random_seed(31337)
+    tf.compat.v1.set_random_seed(31337)
     num_rows = train_df.shape[0]
     if minibatch_size is None:
         minibatch_size = num_rows
