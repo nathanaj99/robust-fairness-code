@@ -366,9 +366,9 @@ class SoftweightsHeuristicModel(model.Model):
           tf.cast(self.lambda_variables, dtype=self.constraints.dtype.base_dtype),
           self.constraints, 1)
 
-        optimizer_theta = tf.train.AdamOptimizer(learning_rate_theta)
-        optimizer_lambda = tf.train.AdamOptimizer(learning_rate_lambda)
-        optimizer_W = tf.train.AdamOptimizer(learning_rate_W)
+        optimizer_theta = tf.compat.v1.train.AdamOptimizer(learning_rate_theta)
+        optimizer_lambda = tf.compat.v1.train.AdamOptimizer(learning_rate_lambda)
+        optimizer_W = tf.compat.v1.train.AdamOptimizer(learning_rate_W)
 
         self.train_op_theta = optimizer_theta.minimize(lagrangian_loss, var_list=self.theta_variables)
         self.train_op_lambda = optimizer_lambda.minimize(-lagrangian_loss, var_list=self.lambda_variables)
