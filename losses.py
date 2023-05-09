@@ -211,6 +211,7 @@ def get_error_rate_and_constraints(df, protected_columns, proxy_columns, label_c
     
     """
     error_rate_overall = error_rate(df[['predictions']], df[[label_column]])
+    df['binary_predictions'] = df['predictions'].apply(lambda x: 1 if x > 0 else 0)
     true_G_protected_dfs = [df[df[protected_attribute] > 0.5] for protected_attribute in protected_columns]
     proxy_Ghat_protected_dfs = [df[df[protected_attribute] > 0.5] for protected_attribute in proxy_columns]
 
@@ -219,9 +220,10 @@ def get_error_rate_and_constraints(df, protected_columns, proxy_columns, label_c
       true_G_constraints = [tpr_overall - tpr(protected_df, label_column) - max_diff for protected_df in true_G_protected_dfs]
       proxy_Ghat_constraints = [tpr_overall - tpr(protected_df, label_column) - max_diff for protected_df in proxy_Ghat_protected_dfs]
     elif constraint == 'dp':
-      dp_overall = df['predictions'].mean()
-      true_G_constraints = [dp_overall - protected_df['predictions'].mean() - max_diff for protected_df in true_G_protected_dfs]
-      proxy_Ghat_constraints = [dp_overall - protected_df['predictions'].mean() - max_diff for protected_df in proxy_Ghat_protected_dfs]
+
+      dp_overall = df['binary_predictions'].mean()
+      true_G_constraints = [dp_overall - protected_df['binary_predictions'].mean() - max_diff for protected_df in true_G_protected_dfs]
+      proxy_Ghat_constraints = [dp_overall - protected_df['binary_predictions'].mean() - max_diff for protected_df in proxy_Ghat_protected_dfs]
     elif constraint == 'err':
       true_G_constraints = [error_rate(protected_df[['predictions']], protected_df[[label_column]]) - error_rate_overall - max_diff for protected_df in true_G_protected_dfs]
       proxy_Ghat_constraints = [error_rate(protected_df[['predictions']], protected_df[[label_column]]) - error_rate_overall - max_diff for protected_df in proxy_Ghat_protected_dfs]
