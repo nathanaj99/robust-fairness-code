@@ -218,6 +218,10 @@ def get_error_rate_and_constraints(df, protected_columns, proxy_columns, label_c
       tpr_overall = tpr(df, label_column)
       true_G_constraints = [tpr_overall - tpr(protected_df, label_column) - max_diff for protected_df in true_G_protected_dfs]
       proxy_Ghat_constraints = [tpr_overall - tpr(protected_df, label_column) - max_diff for protected_df in proxy_Ghat_protected_dfs]
+    elif constraint == 'dp':
+      dp_overall = df['predictions'].mean()
+      true_G_constraints = [dp_overall - protected_df['predictions'].mean() - max_diff for protected_df in true_G_protected_dfs]
+      proxy_Ghat_constraints = [dp_overall - protected_df['predictions'].mean() - max_diff for protected_df in proxy_Ghat_protected_dfs]
     elif constraint == 'err':
       true_G_constraints = [error_rate(protected_df[['predictions']], protected_df[[label_column]]) - error_rate_overall - max_diff for protected_df in true_G_protected_dfs]
       proxy_Ghat_constraints = [error_rate(protected_df[['predictions']], protected_df[[label_column]]) - error_rate_overall - max_diff for protected_df in proxy_Ghat_protected_dfs]
